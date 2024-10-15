@@ -36,81 +36,49 @@
                 <!-- end pageheader -->
                 <!-- ============================================================== -->
                
-                <div class="row">
+                    <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="card">
-                                <h5 class="card-header">Payment Information</h5>
+                                <h5 class="card-header">Document  Information</h5>
                                 <div class="card-body">
-                                    <div id="message"></div>
+                                     <div id="message"></div>
                                     <div class="table-responsive">
+                    <!--                     <a href="add-document.php" class="btn btn-sm" style="background-color:rgb(235, 151, 42) !important;
+                                        color: rgb(243, 245, 238) !important;"><i class="fa fa-fw fa-plus"></i> Add Document</a><br><br> -->
                                         <table class="table table-striped table-bordered first">
                                             <thead>
                                                 <tr>
-                                                    <th scope="col">Student Name</th>
-                                                    <th scope="col">Control No.</th>
+                                                <th scope="col">Date Created</th>
+                                                <th scope="col">Student ID</th>
+                                                    <th scope="col">Full Name</th>
                                                     <th scope="col">Document Name</th>
-                                                    <th scope="col">Trace No.</th>
-                                                    <th scope="col">Reference No.</th>
-                                                    <th scope="col">Total Amount</th>
-                                                    <th scope="col">Date of Payment</th>
-                                                    <th scope="col">Proof of Payment</th>
-                                                    <th scope="col">Status</th>
-                                               <!--      <th scope="col">Action</th> -->
+                                                    <th scope="col">File Size</th>
+                                                    <th scope="col">View Image</th>
+                                                    <th scope="col">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                              <?php
-                                                function formatMoney($number, $fractional=false) {
-                                                if ($fractional) {
-                                                        $number = sprintf('%.2f', $number);
-                                                    }
-                                                    while (true) {
-                                                        $replaced = preg_replace('/(-?\d+)(\d\d\d)/', '$1,$2', $number);
-                                                        if ($replaced != $number) {
-                                                            $number = $replaced;
-                                                        } else {
-                                                            break;
-                                                        }
-                                                    }
-                                                    return $number;
-                                                } 
-                                                $student_id = $_SESSION['student_id'];
+                                            <?php 
                                                 $conn = new class_model();
-                                                $payment = $conn->fetchAll_payment($student_id);
+                                                $docu = $conn->fetchAll_document();
                                                ?>
-                                               <?php foreach ($payment as $row) { ?>
+                                               <?php foreach ($docu as $row) { ?>
                                                 <tr>
-                                                   <td><?= ucwords($row['student_name']); ?></td>
-                                                    <td><?= $row['control_no']; ?></td>
-                                             
+                                                <td><?= date("M d, Y",strtotime($row['date_created'])); ?></td>
+                                                    <td><?= $row['student_id']; ?></td>
+                                                    <td><?= $row['document_decription']; ?></td>
                                                     <td><?= $row['document_name']; ?></td>
-                                                    <td><?= $row['trace_no']; ?></td>
-                                                    <td><?= $row['ref_no']; ?></td>
-                                                    <td><?php $tamount = $row['total_amount']; echo 'Php'.' '.formatMoney($tamount, true); ?></td>
-                                                    <td>    
-                                                      <?php 
-                                                     if($row['date_ofpayment'] === ""){
-                                                           echo "";
-                                                         }else if($row['date_ofpayment'] === $row['date_ofpayment']){
-                                                           echo date("M d, Y",strtotime($row['date_ofpayment']));
-                                                         }
-                                                     ?>
-                                                    </td>
-                                                    
-                                                    <td><?= $row['proof_ofpayment']; ?></td>
-                                                    <td>
-                                                  
-                                                    <?php 
-                                                       if($row['status'] ==="Verified"){
-                                                           echo '<span class="badge bg-warning text-white">Verified</span>';
-                                                         }else if($row['status'] ==="Paid"){
-                                                           echo '<span class="badge bg-success text-white">Paid</span>';
-                                                        } else if($row['status'] ==="Rejected"){
-                                                           echo '<span class="badge bg-danger text-white">Rejected</span>';
-                                                        }
-                                                     ?> </td>
+                                                    <td><?php echo floor($row['image_size']/ 1000) . ' KB'; ?></td>
+                                                    <td><a href="../../student/<?php echo $row['document_name']?>" target="_blank"><img src="../../student/<?php echo $row['document_name']?>" width=75></a></td>
+                                                    <td class="align-right">
+                                                          <a href="../../student/<?php echo $row['document_name']?>" target="_blank" class="text-secondary font-weight-bold text-xs" onlclick="show">
+                                                          <i class="fa fa-eye"></i>
+                                                        </a> 
+                                      
+                                                        
+                                                      </td>
                                                 </tr>
-                                            <?php } ?>
+                                             <?php }?>
                                             </tbody>
                                         </table>
                                     </div>
