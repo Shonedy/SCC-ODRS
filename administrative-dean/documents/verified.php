@@ -26,7 +26,7 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
                                         <li class="breadcrumb-item" aria-current="page">Document Requests</li>
-                                        <li class="breadcrumb-item active" aria-current="page">Releasing</li>
+                                        <li class="breadcrumb-item active" aria-current="page">New Requests</li>
                                     </ol>
                                 </nav>
                             </div>
@@ -83,29 +83,27 @@
                                                     <td><?= $row['processing_officer']; ?></td>
                                                     <td>
                                                      <?php 
-                                                       if($row['dean_status'] ==="Processing"){
-                                                           echo '<span class="badge bg-info text-white">Processing</span>';
+                                                       if($row['dean_status'] ==="Pending"){
+                                                           echo '<span class="badge bg-info text-white">Pending</span>';
                                                          } else if($row['dean_status'] ==="Received"){
                                                            echo '<span class="badge bg-warning text-white">Received</span>';
                                                          }else if($row['dean_status'] ==="Waiting for Payment"){
                                                            echo '<span class="badge bg-danger text-white">Waiting for Payment</span>';
-                                                        }else if($row['dean_status'] ==="Releasing"){
-                                                            echo '<span class="badge bg-success text-white">Releasing</span>';
                                                         }else if($row['dean_status'] ==="Verified"){
-                                                          echo '<span class="badge bg-success text-white">Verified</span>';
-                                                      }else if($row['dean_status'] ==="Declined"){
-                                                        echo '<span class="badge bg-danger text-white">Declined</span>';
-                                                    }
+                                                            echo '<span class="badge bg-success text-white">Verified</span>';
+                                                        }
                                                      ?> 
                                                     </td>
                                                     <td class="align-right">
-                                                        
                                                         <a href="edit-request.php?request=<?= $row['request_id']; ?>&student-number=<?php echo $row['student_id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                                           <i class="fa fa-edit"></i>
                                                         </a> |
-                                                        <a href="email-form.php?request=<?= $row['request_id']; ?>&student-number=<?php echo $row['student_id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                        <a href="Track-document.php?request=<?= $row['request_id']; ?>&student-number=<?php echo $row['student_id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                          <i class="fa fa-eye"></i>
+                                                        </a> |
+                                                        <a href="email-form-r.php?request=<?= $row['request_id']; ?>&student-number=<?php echo $row['student_id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                                           <i class="fa fa-envelope"></i>
-                                                        </a> 
+                                                        </a> |
 
                                                       </td>
                                                 </tr>

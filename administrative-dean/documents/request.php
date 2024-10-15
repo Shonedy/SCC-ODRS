@@ -37,105 +37,86 @@
         <!-- ============================================================== -->
 
         <div class="row">
-            <div class="col-xl-12">
-                <div class="card">
-                    <h5 class="card-header">Request Information</h5>
-                    <div class="card-body">
-                        <div id="message"></div>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered first" attribute="data-show-print" type="boo lean">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Date Requested</th>
-                                        <th scope="col">Control No.</th>
-                                        <th scope="col">Student Name</th>
-                                        <th scope="col">Student ID</th>
-                                        <th scope="col">Document Name</th>
-                                        <th scope="col">Mode Request</th>
-                                        <th scope="col">Processing Officer</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php 
-                                    $conn = new class_model();
-                                    $docrequest = $conn->fetchAll_documentrequest();
-                                    foreach ($docrequest as $row) {
-                                    ?>
-                                        <tr>
-                                            <td><?= date("M d, Y", strtotime($row['date_request'])); ?></td>
-                                            <td><?= $row['control_no']; ?></td>
-                                            <td><?= $row['first_name']; ?>  <?= $row['last_name']; ?></td>
-                                            <td><?= $row['student_id']; ?></td>
-                                            <td><?= $row['document_name']; ?></td>
-                                            <td><?= $row['mode_request']; ?></td>
-                                            <td><?= $row['processing_officer']; ?></td>
-                                            <td>
-                                                <?php 
-                                                switch ($row['dean_status']) {
-                                                    case "Pending":
-                                                        echo '<span class="badge bg-warning text-white">Received</span>';
-                                                        break;
-                                                    case "Waiting for Payment":
-                                                        echo '<span class="badge bg-info text-white">Waiting for Payment</span>';
-                                                        break;
-                                                    case "Verified":
-                                                        echo '<span class="badge bg-success text-white">Verified</span>';
-                                                        break;
-                                                    case "Received":
-                                                        echo '<span class="badge bg-warning text-white">Pending Request</span>';
-                                                        break;
-                                                    case "Declined":
-                                                        echo '<span class="badge bg-danger text-white">Declined</span>';
-                                                        break;
-                                                }
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card">
+                                <h5 class="card-header">Request Information</h5>
+                                <div class="card-body">
+                                    <div id="message"></div>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-bordered first">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Date Requested</th>
+                                                    <th scope="col">Control No.</th>
+                                                    <th scope="col">Student ID</th>
+                                                    <th scope="col">Document Name</th>
+                                                    <th scope="col">Date Releasing</th>
+                                                    <th scope="col">Processing Officer</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                             <?php 
+                                                $conn = new class_model();
+                                                $docrequest = $conn->fetchAll_documentrequest();
+                                               ?>
+                                               <?php foreach ($docrequest as $row) {
+
                                                 ?>
-                                            </td>
-                                            <td class="align-right">
-                                                <?php
-                                                if ($row['dean_status'] !== 'Released') {
-                                                    echo '<a href="edit-request.php?request=' . $row['request_id'] . '&student-number=' . $row['student_id'] . '" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user"><i class="fa fa-edit"></i></a> | ';
-                                                    // echo '<a href="javascript:;" data-id="' . $row['request_id'] . '" class="delete text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user"><i class="fa fa-trash-alt"></i></a> | ';
-                                                }
-                                                ?>
-                                                <a href="<?php 
-                                                    switch ($row['dean_status']) {
-                                                        case 'Pending':
-                                                            echo 'email-form-p.php';
-                                                            break;
-                                                        case 'Received':
-                                                            echo 'email-form-r.php';
-                                                            break;
-                                                        case 'Waiting for Payment':
-                                                            echo 'email-form-wfp.php';
-                                                            break;
-                                                        case 'Releasing':
-                                                            echo 'email-form.php';
-                                                            break;
-                                                        case 'Declined':
-                                                            echo 'email-form-dc.php';
-                                                            break;
-                                                        case 'Released':
-                                                            echo 'email-form-rl.php';
-                                                            break;
-                                                    }
-                                                ?>?request=<?= $row['request_id']; ?>&student-number=<?= $row['student_id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Email user">
-                                                    <i class="fa fa-envelope"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    <?php } ?>
-                                </tbody>
-                            </table>
+                                                <tr>
+                                                    <td><?= date("M d, Y",strtotime($row['date_releasing'])); ?></td>
+                    
+                                                    <td><?= $row['control_no']; ?></td>
+                                                    <td><?= $row['student_id']; ?></td>
+                                                    <td><?= $row['document_name']; ?></td>
+                                                     <td>
+                                                     <?php 
+                                                     if($row['date_releasing'] === ""){
+                                                           echo "";
+                                                         }else if($row['date_releasing'] === $row['date_releasing']){
+                                                           echo date("M d, Y",strtotime($row['date_releasing']));
+                                                         }
+                                                     ?>
+                                                    </td>
+                                                    <td><?= $row['processing_officer']; ?></td>
+                                                    <td>
+                                                     <?php 
+                                                       if($row['dean_status'] ==="Pending"){
+                                                           echo '<span class="badge bg-info text-white">Pending</span>';
+                                                         } else if($row['dean_status'] ==="Received"){
+                                                           echo '<span class="badge bg-warning text-white">Received</span>';
+                                                         }else if($row['dean_status'] ==="Declined"){
+                                                           echo '<span class="badge bg-danger text-white">Declined</span>';
+                                                        }else if($row['dean_status'] ==="Verified"){
+                                                            echo '<span class="badge bg-success text-white">Verified</span>';
+                                                        }
+                                                     ?> 
+                                                    </td>
+                                                    <td class="align-right">
+                                                        <a href="edit-request.php?request=<?= $row['request_id']; ?>&student-number=<?php echo $row['student_id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                          <i class="fa fa-edit"></i>
+                                                        </a> |
+                                                        <a href="Track-document.php?request=<?= $row['request_id']; ?>&student-number=<?php echo $row['student_id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                          <i class="fa fa-eye"></i>
+                                                        </a> |
+                                                        <a href="email-form-r.php?request=<?= $row['request_id']; ?>&student-number=<?php echo $row['student_id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                          <i class="fa fa-envelope"></i>
+                                                        </a> |
+
+                                                      </td>
+                                                </tr>
+                                             <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <!-- ============================================================== -->
+                        <!-- end responsive table -->
+                        <!-- ============================================================== -->
                     </div>
-                </div>
-            </div>
-            <!-- ============================================================== -->
-            <!-- end responsive table -->
-            <!-- ============================================================== -->
-        </div>
     </div>
 </div>
 <!-- Modal -->
