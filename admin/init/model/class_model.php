@@ -154,16 +154,6 @@ class class_model
 	}
 
 
-	public function fetchAll_hsstudent()
-	{
-		$sql = "SELECT * FROM  tbl_high_school";
-		$stmt = $this->conn->prepare($sql);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		$data = array();
-		while ($row = $result->fetch_assoc()) {
-			$data[] = $row;
-
 
 		public function edit_document($document_name, $description, $daysto_process, $price, $document_id) {
 			$sql = "UPDATE `tbl_document` SET `document_name` = ?, `description` = ?, `daysto_process` = ?, `price` = ? WHERE document_id = ?";
@@ -178,18 +168,6 @@ class class_model
 			}
 		}
 
-		public function delete_course($course_id){
-			$sql = "DELETE FROM tbl_course WHERE course_id = ?";
-			 $stmt = $this->conn->prepare($sql);
-			$stmt->bind_param("i", $course_id);
-			if($stmt->execute()){
-				$stmt->close();
-				$this->conn->close();
-				return true;
-			}
-		}
-		return $data;
-	}
 
 
 
