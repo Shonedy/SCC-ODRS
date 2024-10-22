@@ -64,13 +64,14 @@
                    ?>
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                    
+                                    <div class="card influencer-profile-data">
+                                        <div class="card-body" >
                                           <div class="" id="message"></div>
                                           <form method="POST">
                                          <div class="col-6 offset-3">
                                           <div class="form-box" style="background-color:#1A6310 !important">
                                            <div class="form-text">                                     
-                                           Document Name: <?= $row['status']; ?> '<?= $row['document_name']; ?>' 
+                                               <?= $row['status']; ?> '<?= $row['document_name']; ?>' Request
                                                <p id="studentID_no" hidden><?= $row['studentID_no']; ?></p>
                                                <p id="document_name" hidden><?= $row['document_name']; ?></p>
                                                <p id="date_releasing" hidden><?= date("M d, Y",strtotime($row['date_releasing'])); ?></p>
@@ -164,7 +165,8 @@
                                     </div>
                                <?php }?>
                             </div>
-                        
+                        </div>
+                    </div>
            
             </div>
         </div>
