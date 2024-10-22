@@ -32,6 +32,29 @@
                         </div>
                     </div>
                 </div>
+
+
+
+                <style>
+                    .modal-body {
+    display: flex;
+    align-items: flex-start; /* Align items at the top */
+    padding: 20px; /* Add padding for better spacing */
+}
+
+.modal-title {
+    font-weight: bold; /* Make the title bold */
+}
+
+#modal-proof-of-payment {
+    max-width: 200px; /* Maximum width for the image */
+    height: auto; /* Maintain aspect ratio */
+    border: 1px solid #ddd; /* Optional border around the image */
+    border-radius: 5px; /* Rounded corners */
+    margin-left: auto; /* Center the image on the right side */
+}
+
+                </style>
                 <!-- ============================================================== -->
                 <!-- end pageheader -->
                 <!-- ============================================================== -->
@@ -55,6 +78,7 @@
                                                     <th scope="col">Date of Payment</th>
                                                     <th scope="col">Proof of Payment</th>
                                                     <th scope="col">Status</th>
+                                                    <th scope="col">View Information</th>
                                                <!--      <th scope="col">Action</th> -->
                                                 </tr>
                                             </thead>
@@ -109,6 +133,18 @@
                                                            echo '<span class="badge bg-danger text-white">Rejected</span>';
                                                         }
                                                      ?> </td>
+                                                     <td>
+                                                     <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#paymentModal"
+                                                        data-student-name="<?= $row['student_name']; ?>"
+                                                        data-control-no="<?= $row['control_no']; ?>"
+                                                        data-document-name="<?= $row['document_name']; ?>"
+                                                        data-total-amount="<?= $row['total_amount']; ?>"
+                                                        data-date-payment="<?= $row['date_ofpayment']; ?>"
+                                                        data-status="<?= $row['status']; ?>"
+                                                        data-proof-of-payment="../../student/<?= $row['proof_ofpayment']; ?>"> 
+                                                        <i class="fa fa-eye"></i> View
+                                                    </button>
+                                                    </td>
                                                 </tr>
                                             <?php } ?>
                                             </tbody>
@@ -125,7 +161,50 @@
             </div>
             
         </div>
+    
+        !-- Payment Information Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Payment Information</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body d-flex align-items-start"> <!-- Use align-items-start for top alignment -->
+                <div class="mr-2"> <!-- Text container -->
+                    <p><strong>Student Name:</strong> <span id="modal-student-name"></span></p>
+                    <p><strong>Control No:</strong> <span id="modal-control-no"></span></p>
+                    <p><strong>Document Name:</strong> <span id="modal-document-name"></span></p>
+                    <p><strong>Total Amount:</strong> <span id="modal-total-amount"></span></p>
+                    <p><strong>Date of Payment:</strong> <span id="modal-date-payment"></span></p>
+                    <p><strong>Status:</strong> <span id="modal-status"></span></p>
+                    <p><strong>Proof of Payment:</strong></p>
+                </div>
+                <img id="modal-proof-of-payment" class="img-fluid" src="" alt="Proof of Payment" style="max-width: 200px; height: auto;" data-toggle="modal" data-target="#largeImageModal"> <!-- Set max-width for the image -->
+            </div>
+        </div>
     </div>
+</div>
+
+<!-- Large Image Modal -->
+<div class="modal fade" id="largeImageModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Proof of Payment</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img id="large-proof-of-payment" src="" alt="Proof of Payment" class="img-fluid" style="width: 100%; height: auto;">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
     <!-- ============================================================== -->
     <!-- end main wrapper -->
     <!-- ============================================================== -->
@@ -179,6 +258,46 @@
         }
 
     });
+
+    $(document).ready(function() {
+    $('#paymentModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        
+        // Extract info from data-* attributes
+        var studentName = button.data('student-name');
+        var controlNo = button.data('control-no');
+        var documentName = button.data('document-name');
+        var totalAmount = button.data('total-amount');
+        var datePayment = button.data('date-payment');
+        var status = button.data('status');
+        var proofOfPayment = button.data('proof-of-payment'); // Path of the image
+
+        // Update the modal's content
+        var modal = $(this);
+        modal.find('#modal-student-name').text(studentName);
+        modal.find('#modal-control-no').text(controlNo);
+        modal.find('#modal-document-name').text(documentName);
+        modal.find('#modal-total-amount').text(totalAmount);
+        modal.find('#modal-date-payment').text(datePayment);
+        modal.find('#modal-status').text(status);
+        
+        // Display the proof of payment image if available
+        if (proofOfPayment) {
+            modal.find('#modal-proof-of-payment').attr('src', proofOfPayment);
+            modal.find('#modal-proof-of-payment').data('large-image', proofOfPayment); // Store large image URL
+        } else {
+            modal.find('#modal-proof-of-payment').attr('src', 'path-to-default-image.jpg'); // Set default image if no proof available
+        }
+    });
+
+    // Show large image in another modal
+    $('#largeImageModal').on('show.bs.modal', function() {
+        var largeImage = $('#modal-proof-of-payment').data('large-image'); // Get the large image URL
+        $(this).find('#large-proof-of-payment').attr('src', largeImage);
+    });
+});
+
+
 </script>
 </body>
  

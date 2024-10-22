@@ -61,8 +61,6 @@
                                         <th scope="col">Document Name</th>
                                         <th scope="col">Processing Officer</th>
                                         <th scope="col">Status</th>
-                                        <th scope="col">Clearance</th>
-                                        <th scope="col">Payment</th>
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>
@@ -94,24 +92,8 @@
                                                     }
                                                 ?> 
                                             </td>
-                                            <!-- clearance -->
-                                            <td class="align-right">
-                                                <div class="box">
-                                                    <div class="four">
-                                                    <a href="Track-document.php?request=<?= $row['request_id']; ?>&student-number=<?= $row['student_id']; ?>" class="btn btn-sm btn-primary text-xs" data-toggle="tooltip" data-original-title="Clearance">
-                                                        Clearance
-                                                    </a>
-                                                    </div> 
-                                                </div>
-                                            </td>
-                                            <td>
-                                    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#paymentModal"
-                                        data-control-no="<?= $row['control_no']; ?>"
-                                         data-document-name="<?= $row['document_name']; ?>"
-                                        data-total-amount="<?= $row['price']; ?>">
-                                        <i class="fa fa-credit-card"></i> Pay
-                                    </button>
-                                    </td>
+                
+                    
                                             <td class="align-right">
                                                 <a href="edit-request.php?request=<?= $row['request_id']; ?>&student-number=<?= $row['student_id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit request">
                                                     <i class="fa fa-edit"></i>

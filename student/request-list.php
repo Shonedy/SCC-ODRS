@@ -55,7 +55,6 @@
                                 <th scope="col">Document Name</th>
                                 <th scope="col">Date Request</th>
                                 <th scope="col">Date Releasing</th>
-                                <th scope="col">Processing Officer</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -82,7 +81,6 @@
                                             }
                                         ?>
                                     </td>
-                                    <td><?= $row['processing_officer']; ?></td>
                                     <td>
                                         <?php 
                                             if ($row['registrar_status'] === "Released") {

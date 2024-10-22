@@ -78,6 +78,11 @@
     .text-right {
         text-align: right;
     }
+
+    .form-check-input {
+    display: inline-block !important;
+    visibility: visible !important;
+}
 </style>
 
 <div class="row justify-content-center">
@@ -92,6 +97,7 @@
                         <h4 class="section-title">Applicant's Information</h4>
                         <div class="row">
                             <div class="col-md-4">
+                                
                             <?php
                                 $conn = new class_model();
                                 $getstudno = $conn->student_profile($student_id);
@@ -174,26 +180,85 @@
                                 <label>Select Document</label>
                                 <br>
                                 <?php
-                                $conn = new class_model();
-                                $doc = $conn->fetchAll_document(); 
-                                if ($doc && count($doc) > 0) {
-                                    foreach ($doc as $index => $document) {
-                                        // Display each document as a checkbox with its price
-                                        echo '<div class="form-check">';
-                                        echo '<input class="form-check-input document-checkbox" type="checkbox" name="document_name[]" id="document_name' . ($index + 1) . '" value="' . $document['document_name'] . '" data-price="' . $document['price'] . '">';
-                                        echo '<label class="form-check-label">' . $document['document_name'] . ' (' . '₱' . $document['price'] . ')</label>';
-                                        
-                                        // Hidden quantity input associated with the document
-                                        echo '<div id="quantity' . ($index + 1) . '" class="mt-1 hidden" style="display:none;">';
-                                        echo '<label for="' . $document['document_name'] . '">Copies:</label>';
-                                        echo '<input type="number" name="no_ofcopies[]" value="1" class="form-control no-of-copies" min="1">';
-                                        echo '</div>';
-                                        echo '</div>';
-                                    }
-                                } else {
-                                    echo "No documents found.";
-                                }
-                                ?>
+// Fetch all documents from the database
+$conn = new class_model();
+$doc = $conn->fetchAll_document(); 
+if ($doc && count($doc) > 0) {
+    foreach ($doc as $index => $document) {
+        // Check if the document is "Certification"
+        if ($document['document_name'] === 'Certification') {
+            // Specific rendering for the Certification document
+            echo '<div class="form-check">';
+            echo '<input class="form-check-input document-checkbox" type="checkbox" name="document_name[]" id="document_name' . ($index + 1) . '" value="' . $document['document_name'] . '" data-price="' . $document['price'] . '">';
+            echo '<label class="form-check-label">' . $document['document_name'] . ' (₱' . $document['price'] . ')</label>';
+            
+            // Render the specific Certification options
+            echo '<div id="certification_options_' . ($index + 1) . '" class="mt-2" style="display:none;">';
+            echo '<div class="form-group">';
+
+            // Option for "Units Earned" with additional input field
+            echo '<div class="form-check">';
+            echo '<input class="form-check-input" type="radio" name="certification_type' . ($index + 1) . '" id="certification_type1_' . ($index + 1) . '" value="Units Earned">';
+            echo '<label class="form-check-label" for="certification_type1_' . ($index + 1) . '">Units Earned</label>';
+            echo '<input type="text" name="units_earned" id="units_earned_' . ($index + 1) . '" class="form-control mt-2" placeholder="Enter Units Earned" style="display:none;">'; // Text input for Units Earned
+            echo '</div>';
+
+            // Option for "As Graduate" with additional input field
+            echo '<div class="form-check">';
+            echo '<input class="form-check-input" type="radio" name="certification_type' . ($index + 1) . '" id="certification_type2_' . ($index + 1) . '" value="As Graduate">';
+            echo '<label class="form-check-label" for="certification_type2_' . ($index + 1) . '">As Graduate</label>';
+            echo '<input type="text" name="graduate_details" id="graduate_details_' . ($index + 1) . '" class="form-control mt-2" placeholder="Enter Graduation Details" style="display:none;">'; // Text input for As Graduate
+            echo '</div>';
+
+            // Option for "Other" with additional input field
+            echo '<div class="form-check">';
+            echo '<input class="form-check-input" type="radio" name="certification_type' . ($index + 1) . '" id="certification_type3_' . ($index + 1) . '" value="Other">';
+            echo '<label class="form-check-label" for="certification_type3_' . ($index + 1) . '">Other (Please Specify)</label>';
+            echo '<input type="text" name="other_certification" id="other_certification_' . ($index + 1) . '" class="form-control mt-2" placeholder="Please Specify" style="display:none;">';
+            echo '</div>';
+
+            echo '</div>';
+            echo '</div>'; // Close certification_options div
+            
+            echo '</div>'; // Close form-check div
+        } else {
+            // Render all other documents as before
+            echo '<div class="form-check">';
+            echo '<input class="form-check-input document-checkbox" type="checkbox" name="document_name[]" id="document_name' . ($index + 1) . '" value="' . $document['document_name'] . '" data-price="' . $document['price'] . '">';
+            echo '<label class="form-check-label">' . $document['document_name'] . ' (₱' . $document['price'] . ')</label>';
+            
+            // Hidden quantity input associated with the document
+            echo '<div id="quantity' . ($index + 1) . '" class="mt-2" style="display:none;">';
+            
+            // Input for the number of copies and request type (as before)
+            echo '<div class="d-flex align-items-center">';
+            echo '<label for="no_ofcopies' . ($index + 1) . '" class="mr-2">Copies:</label>';
+            echo '<input type="number" name="no_ofcopies[]" value="1" class="form-control no-of-copies" min="1" id="no_ofcopies' . ($index + 1) . '" style="width: 80px;">';
+            
+            // Radio buttons for request type
+            echo '<div class="form-check col-md-6 ml-3">';
+            echo '<input class="form-check-input" type="radio" name="request_type' . ($index + 1) . '" id="request_type1_' . ($index + 1) . '" value="1st request" checked>';
+            echo '<label class="form-check-label" for="request_type1_' . ($index + 1) . '">1st Request</label>';
+            echo '</div>';
+            
+            echo '<div class="form-check col-md-7 ml-3">';
+            echo '<input class="form-check-input" type="radio" name="request_type' . ($index + 1) . '" id="request_type2_' . ($index + 1) . '" value="re-issuance">';
+            echo '<label class="form-check-label" for="request_type2_' . ($index + 1) . '">Re-Issuance</label>';
+            echo '</div>';
+            
+            echo '</div>';
+            echo '</div>';
+            echo '</div>'; // Close form-check div
+        }
+    }
+} else {
+    echo "No documents found.";
+}
+?>
+
+
+
+
                             </div>
                         </div>
 
@@ -229,7 +294,9 @@
                             </div>
                         </div>
                         <!-- Hidden input for "Other" -->
+                        <div class="col-lg-5">
                         <input type="text" id="otherPurposeInput" name="purpose[]" placeholder="Enter purpose" style="display:none;">
+                        </div>
                     </div>
 
                     <!-- Submission Section -->
@@ -289,156 +356,151 @@
     </script>
 
 <script>
-$(document).ready(function() {
+$(document).ready(function () {
     let formData = null;
-    const deliveryFee = 50; // Set delivery fee value (adjust as needed)
+    const deliveryFee = 50;
 
-    // Show or hide quantity input based on the checkbox selection
-    $('input[type="checkbox"][name="document_name[]"]').change(function() {
-        const quantityId = '#quantity' + this.id.replace('document_name', '');
-        if (this.checked) {
-            $(quantityId).show();
-        } else {
-            $(quantityId).hide();
-            $(quantityId).find('input').val(''); // Clear input when unchecked
-        }
-        calculateTotalAmount(); // Recalculate total amount on checkbox change
-    });
+    // Toggle visibility of quantity input and recalculate total
+    $('input[name="document_name[]"]').change(function () {
+        const qtyDiv = `#quantity${this.id.replace('document_name', '')}`;
+        $(qtyDiv).toggle(this.checked).find('input').val(this.checked ? 1 : '');
 
-    $('#otherPurposeCheckbox').change(function() {
-        if (this.checked) {
-            $('#otherPurposeInput').show();
-        } else {
-            $('#otherPurposeInput').hide().val(''); // Hide and clear when unchecked
-        }
-    });
+        // Check if the selected document is "Certification"
+        if ($(this).val() === 'Certification') {
+            const certOptionsDiv = `#certification_options_${this.id.replace('document_name', '')}`;
+            $(certOptionsDiv).toggle(this.checked);  // Show/Hide certification options
 
-    // Show or hide delivery fee based on mode of request
-    $('#mode_request').change(function() {
-        if ($(this).val() === 'Delivery') {
-            $('#deliveryFeeSection').show();
-        } else {
-            $('#deliveryFeeSection').hide();
-        }
-        calculateTotalAmount(); // Recalculate total amount when mode changes
-    });
-
-    // Function to calculate total amount
-    function calculateTotalAmount() {
-        let totalAmount = 0;
-
-        // Calculate total amount based on selected documents and copies
-        $('input[type="checkbox"][name="document_name[]"]').each(function() {
-            if (this.checked) {
-                let no_ofcopies = $(this).closest('.form-check').find('input[name="no_ofcopies[]"]').val();
-                no_ofcopies = no_ofcopies ? parseInt(no_ofcopies) : 1; // Default to 1 if not provided
-                const price = parseFloat($(this).data('price'));
-                totalAmount += price * no_ofcopies;
+            // If unchecked, reset the certification options
+            if (!this.checked) {
+                $(`#certification_options_${this.id.replace('document_name', '')} input[type="radio"]`).prop('checked', false);
+                $(`#units_earned_${this.id.replace('document_name', '')}`).hide().val('');
+                $(`#graduate_details_${this.id.replace('document_name', '')}`).hide().val('');
+                $(`#other_certification_${this.id.replace('document_name', '')}`).hide().val('');
             }
-        });
-
-        // Add delivery fee if "Delivery" is selected
-        if ($('#mode_request').val() === 'Delivery') {
-            totalAmount += deliveryFee;
         }
 
-        // Update total price field
-        const formattedTotalAmount = totalAmount.toFixed(2); // Format total amount
-        $('input[name="price"]').val(formattedTotalAmount); // Update form field without ₱ symbol
+        calculateTotal();
+    });
 
-        return formattedTotalAmount;
+    // Show/Hide text inputs for certification options based on selected radio button
+    $('input[type="radio"]').change(function () {
+        const id = $(this).attr('id');
+        const index = id.split('_').pop(); // Extract the index from the radio button's ID
+
+        // Hide all certification-specific inputs initially
+        $(`#units_earned_${index}`).hide().val('');
+        $(`#graduate_details_${index}`).hide().val('');
+        $(`#other_certification_${index}`).hide().val('');
+
+        // Show the relevant input based on the selected option
+        if ($(this).val() === 'Units Earned') {
+            $(`#units_earned_${index}`).show(); // Show Units Earned field
+        } else if ($(this).val() === 'As Graduate') {
+            $(`#graduate_details_${index}`).show(); // Show As Graduate field
+        } else if ($(this).val() === 'Other') {
+            $(`#other_certification_${index}`).show(); // Show Other (Please Specify) field
+        }
+    });
+
+    // Toggle other purpose input visibility
+    $('#otherPurposeCheckbox').change(function () {
+        $('#otherPurposeInput').toggle(this.checked).val('');
+    });
+
+    // Show/hide delivery fee section and recalculate total
+    $('#mode_request').change(function () {
+        $('#deliveryFeeSection').toggle($(this).val() === 'Delivery');
+        calculateTotal();
+    });
+
+    // Calculate total amount
+    function calculateTotal() {
+        let total = $('input[name="document_name[]"]:checked').get().reduce((sum, doc) => {
+            const copies = +$(doc).closest('.form-check').find('input[name="no_ofcopies[]"]').val() || 1;
+            return sum + parseFloat($(doc).data('price')) * copies;
+        }, 0);
+
+        if ($('#mode_request').val() === 'Delivery') total += deliveryFee;
+        $('input[name="price"]').val(total.toFixed(2));
+        return total;
     }
 
-    $('#submitForm').click(function(e) {
-        e.preventDefault(); // Prevent default form submission
+    // Form submission logic
+    $('#submitForm').click(function (e) {
+        e.preventDefault();
+        formData = new FormData($('form[name="docu_forms"]')[0]);
 
-        formData = new FormData(document.querySelector('form[name="docu_forms"]'));
+        const selectedDocs = $('input[name="document_name[]"]:checked');
+        if (!selectedDocs.length) return showError('Please select at least one document.');
+        if (!$('#course').val()) return showError('Please select a course.');
 
-        let docNames = [];
-        let docCopies = [];
-        let isDocumentSelected = false;
+        formData.delete('document_name[]');
+        formData.delete('no_ofcopies[]');
+        selectedDocs.each(function () {
+            formData.append('document_name[]', this.value);
+            const copies = $(this).closest('.form-check').find('input[name="no_ofcopies[]"]').val() || 1;
+            formData.append('no_ofcopies[]', copies);
 
-        // Calculate total amount based on selected documents and copies
-        $('input[type="checkbox"][name="document_name[]"]').each(function() {
-            if (this.checked) {
-                isDocumentSelected = true;
-                docNames.push(this.value); // Add selected document name
-                let no_ofcopies = $(this).closest('.form-check').find('input[name="no_ofcopies[]"]').val();
-                no_ofcopies = no_ofcopies ? no_ofcopies : 1; // Default to 1 if not provided
-                docCopies.push(no_ofcopies);
+            // Collect additional certification info if selected
+            if (this.value === 'Certification') {
+                const index = this.id.replace('document_name', '');
+                const selectedCertType = $(`input[name="certification_type${index}"]:checked`).val();
+
+                if (selectedCertType === 'Units Earned') {
+                    formData.append('units_earned', $(`#units_earned_${index}`).val());
+                } else if (selectedCertType === 'As Graduate') {
+                    formData.append('graduate_details', $(`#graduate_details_${index}`).val());
+                } else if (selectedCertType === 'Other') {
+                    formData.append('other_certification', $(`#other_certification_${index}`).val());
+                }
             }
         });
 
-        // Validate if any document is selected
-        if (!isDocumentSelected) {
-            $('#message').html('<div class="alert alert-danger">Please select at least one document.</div>');
-            return;
-        }
+        const total = calculateTotal();
+        formData.append('price', total);
+        formData.append('course', $('#course').val());
 
-        // Validate course selection
-        var course = $('#course').val();
-        if (course === "") {
-            $('#message').html('<div class="alert alert-danger">Please select a course.</div>');
-            return;
-        }
-        formData.append('course', course);
-
-        // Remove old document names and copies
-        formData.delete('document_name[]');
-        formData.delete('no_ofcopies[]');
-
-        // Append selected documents and copies to form data
-        docNames.forEach((doc, index) => {
-            formData.append('document_name[]', doc);
-            formData.append('no_ofcopies[]', docCopies[index]);
-        });
-
-        // Get the total amount and add it to formData
-        const totalAmount = calculateTotalAmount();
-        formData.append('price', totalAmount); // Append price to form data
-
-        // Populate modal with form data
-        $('#modalStudentName').text(
-            $('input[name="first_name"]').val() + ' ' +
-            $('input[name="middle_name"]').val() + ' ' + 
-            $('input[name="last_name"]').val()
-        );
-        $('#modalControlNo').text($('input[name="control_no"]').val());
-        $('#modalDocumentName').text(docNames.join(', '));
+        // Populate and show the modal
+        $('#modalStudentName').text(`${getField('first_name')} ${getField('middle_name')} ${getField('last_name')}`);
+        $('#modalControlNo').text(getField('control_no'));
+        $('#modalDocumentName').text(selectedDocs.map((i, el) => el.value).get().join(', '));
         $('#modalMode').text($('#mode_request').val());
-        $('#modalTotalAmount').text('₱' + totalAmount); // Display total amount in modal with ₱ symbol
-
+        $('#modalTotalAmount').text(`₱${total.toFixed(2)}`);
         $('#paymentModal').modal('show');
     });
 
-    // Hide modal on cancel button
-    $('.btn-secondary').click(function() {
-        $('#paymentModal').modal('hide');
-    });
-
-    // Confirm form submission when modal is confirmed
-    $('#confirmSubmit').click(function() {
-        if (formData !== null) {
+    $('#confirmSubmit').click(function () {
+        if (formData) {
             $.ajax({
                 url: '../init/controllers/add_request.php',
-                type: "POST",
+                type: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function(response) {
-                    $("#message").html(response);
-                    window.scrollTo(0, 0); // Scroll to top of page on success
-                    $('#paymentModal').modal('hide'); // Close modal on success
+                success(response) {
+                    $('#message').html(response);
+                    $('#paymentModal').modal('hide');
+                    window.scrollTo(0, 0);
                 },
-                error: function(response) {
-                    console.log("Failed to submit the form.");
+                error() {
+                    console.error('Failed to submit the form.');
                 }
             });
         }
     });
+
+    function getField(name) {
+        return $(`input[name="${name}"]`).val();
+    }
+
+    function showError(msg) {
+        $('#message').html(`<div class="alert alert-danger">${msg}</div>`);
+    }
+
+    $('.btn-secondary').click(function () {
+        $('#paymentModal').modal('hide');
+    });
 });
-
-
 
 
 // Example starter JavaScript for disabling form submissions if there are invalid fields

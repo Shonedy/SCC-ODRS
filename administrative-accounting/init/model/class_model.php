@@ -337,17 +337,38 @@
 			}
 
 			public function fetchAll_payment(){ 
-				$sql = "SELECT *,CONCAT(tbl_students.first_name, ', ' ,tbl_students.middle_name, ' ' ,tbl_students.last_name) as student_name FROM  tbl_payment INNER JOIN tbl_students ON tbl_students.student_id =  tbl_payment.student_id ORDER BY tbl_payment.student_id DESC";
-					$stmt = $this->conn->prepare($sql);
+				$sql = "SELECT *, CONCAT(tbl_students.first_name, ', ' ,tbl_students.middle_name, ' ' ,tbl_students.last_name) as student_name 
+						FROM tbl_payment 
+						INNER JOIN tbl_students ON tbl_students.student_id = tbl_payment.student_id 
+						ORDER BY tbl_payment.student_id DESC";
+				
+				// Prepare the SQL statement
+				$stmt = $this->conn->prepare($sql);
+				
+				// Check if the statement was prepared successfully
+				if ($stmt) {
+					// Execute the statement
 					$stmt->execute();
+					
+					// Get the result set
 					$result = $stmt->get_result();
 					$data = array();
-					 while ($row = $result->fetch_assoc()) {
-							   $data[] = $row;
-						}
-					 return $data;
-	
-			  }
+					
+					// Fetch each row and add it to the data array
+					while ($row = $result->fetch_assoc()) {
+						$data[] = $row;
+					}
+					
+					// Close the statement
+					$stmt->close();
+					
+					// Return the fetched data
+					return $data;
+				} else {
+					// If the statement failed, return an empty array or handle the error
+					return array();
+				}
+			}
 
 		  public function edit_payment($control_no, $total_amount, $amount_paid, $date_ofpayment, $proof_ofpayment, $status, $payment_id){
 			$sql = "UPDATE `tbl_payment` SET  `control_no` = ?, `total_amount` = ?, `amount_paid` = ?, `date_ofpayment` = ?, `proof_ofpayment` = ?, `status` = ?  WHERE payment_id = ?";

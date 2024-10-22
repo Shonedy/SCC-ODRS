@@ -35,58 +35,67 @@
                 <!-- ============================================================== -->
                 <!-- end pageheader -->
                 <!-- ============================================================== -->
-                  <?php 
-                    include '../init/model/config/connection2.php';
-                    $GET_docuid = intval($_GET['document']);
-                    $documentname = $_GET['document-name'];
-                    $sql = "SELECT * FROM `tbl_document` WHERE `document_id`= ? AND document_name = ?";
-                    $stmt = $conn->prepare($sql); 
-                    $stmt->bind_param("is", $GET_docuid, $documentname);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                    while ($row = $result->fetch_assoc()) {
-                   ?>
+                <?php 
+                include '../init/model/config/connection2.php';
+                $GET_id = intval($_GET['document']);
+                $document_name = $_GET['document-name'];
+                $sql = "SELECT * FROM `tbl_document` WHERE `document_id` = ? AND `document_name` = ?";
+                $stmt = $conn->prepare($sql); 
+                $stmt->bind_param("is", $GET_id, $document_name);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                while ($row = $result->fetch_assoc()) {
+                ?>
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <div class="card influencer-profile-data">
-                                        <div class="card-body">
-                                             <div class="" id="message"></div>
-                                            <form id="validationform" name="docu_form" data-parsley-validate="" novalidate="" enctype="multipart/form-data" >
-                                                <div class="form-group row">
-                                                    <label class="col-12 col-sm-3 col-form-label text-sm-right"><i class="fa fa-file-word"></i> Document Info</label>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-12 col-sm-3 col-form-label text-sm-right">Upload Document</label>
-                                                    <div class="col-12 col-sm-8 col-lg-6">
-                                                        <input data-parsley-type="alphanum" type="file" value="<?= $row['document_name']; ?>" alt="document_name" id="document_name" accept=".docx, .doc, .pptx, .ppt, .xlsx, .xls, .pdf, .odt" required="" placeholder="" class="form-control">
-                                                        <b>Document Name:</b> <?= $row['document_name']; ?>
-                                                        <footer style="font-size: 11px"><b>File Type:</b><font color="red"><i>.docx .doc .pptx .ppt .xlsx .xls .pdf .odt</i></font></footer>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-12 col-sm-3 col-form-label text-sm-right">Description</label>
-                                                    <div class="col-12 col-sm-8 col-lg-6">
-                                                        <input data-parsley-type="alphanum" value="<?= $row['document_decription']; ?>" alt="document_decription" type="text" required="" placeholder="" class="form-control">
-                                                    </div>
-                                                </div>
-
-                                                </div>
-                                                <div class="form-group row text-right">
-                                                    <div class="col col-sm-10 col-lg-9 offset-sm-1 offset-lg-0">
-                                                       <input alt="document_id" value="<?= $row['document_id']; ?>" type="hidden">
-                                                        <input type="text" alt="student_id" value="<?= $_SESSION['student_id'];?>" class="form-control" hidden>
-                                                        <button type="button" class="btn btn-space btn-primary" id="btn-docu">Submit</button>
-                                                    </div>
-                                                </div>
-                                            </form>
+                            <div class="card influencer-profile-data">
+                                <div class="card-body">
+                                    <div class="" id="message"></div>
+                                    <form id="validationform" name="docu_form" data-parsley-validate="" novalidate="" enctype="multipart/form-data">
+                                        <div class="form-group row">
+                                            <label class="col-12 col-sm-3 col-form-label text-sm-right"><i class="fa fa-file-word"></i> Document Info</label>
                                         </div>
-                                    </div>
-                                  <?php }  ?>
+                                        <div class="form-group row">
+                                            <label class="col-12 col-sm-3 col-form-label text-sm-right">Course Name</label>
+                                            <div class="col-12 col-sm-8 col-lg-6">
+                                                <input data-parsley-type="alphanum" name="document_name" value="<?= htmlspecialchars($row['document_name']); ?>" type="text" required placeholder="" class="form-control document_name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-12 col-sm-3 col-form-label text-sm-right">Description</label>
+                                            <div class="col-12 col-sm-8 col-lg-6">
+                                                <input data-parsley-type="alphanum" name="description" value="<?= htmlspecialchars($row['description']); ?>" type="text" required placeholder="" class="form-control description">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-12 col-sm-3 col-form-label text-sm-right">Days to Process:</label>
+                                            <div class="col-12 col-sm-8 col-lg-6">
+                                                <input data-parsley-type="alphanum" name="daysto_process" value="<?= htmlspecialchars($row['daysto_process']); ?>" type="text" required placeholder="" class="form-control daysto_process">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-12 col-sm-3 col-form-label text-sm-right">Price:</label>
+                                            <div class="col-12 col-sm-8 col-lg-6">
+                                                <input data-parsley-type="alphanum" name="price" value="<?= htmlspecialchars($row['price']); ?>" type="text" required placeholder="" class="form-control price">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row text-right">
+                                            <div class="col col-sm-10 col-lg-9 offset-sm-1 offset-lg-0">
+                                                <input type="hidden" name="document_id" value="<?= htmlspecialchars($row['document_id']); ?>">
+                                                <button type="submit" class="btn btn-space btn-primary" id="btn-docu">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-           
-            </div>
+                <?php 
+                }  
+                ?>
+
+            </div>  
         </div>
     </div>
     <!-- ============================================================== -->
@@ -127,52 +136,49 @@
           var intials = $('#firstName').text().charAt(0) + $('#lastName').text().charAt(0);
           var profileImage = $('#profileImage').text(intials);
         });
+
+        $(document).ready(function() {
+        $('form[name="docu_form"]').on('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Collect input values
+            var document_name = $(this).find('input[name="document_name"]').val();
+            var description = $(this).find('input[name="description"]').val();
+            var daysto_process = $(this).find('input[name="daysto_process"]').val();
+            var price = $(this).find('input[name="price"]').val();
+            var document_id = $(this).find('input[name="document_id"]').val();
+
+            // Check for empty fields
+            if (!document_name || !description || !daysto_process || !price) {
+                $('#message').html('<div class="alert alert-danger">All fields are required!</div>');
+                return;
+            }
+
+            // Make an AJAX request to edit the document
+            $.ajax({
+                url: '../init/controllers/edit_document.php',
+                method: 'post',
+                data: {
+                    document_name: document_name,
+                    description: description,
+                    daysto_process: daysto_process,
+                    price: price,
+                    document_id: document_id
+                },
+                success: function(response) {
+                    $("#message").html(response);
+                },
+                error: function() {
+                    console.log("Failed to submit form.");
+                    $('#message').html('<div class="alert alert-danger">An error occurred while processing your request.</div>');
+                }
+            });
+        });
+    });
     </script>
 
-      <script>
-           document.addEventListener('DOMContentLoaded', () => {
-              let btn = document.querySelector('#btn-docu');
-              btn.addEventListener('click', () => {
 
-              const document_name = document.querySelector('input[id=document_name]').value; 
-              const document_decription = document.querySelector('input[alt=document_decription]').value;
-              const document_id = document.querySelector('input[alt=document_id]').value;
-              const student_id = document.querySelector('input[alt=student_id]').value;
 
-             var data = new FormData(this.form);
-
-                data.append('document_name', $('#document_name')[0].files[0]);
-                data.append('document_decription', document_decription);
-                data.append('document_id', document_id);
-                data.append('student_id', student_id);
-   
-
-                if (document_name === '' || document_decription === '') {//continue niyo nalang ito
-
-                  } else {
-                      $.ajax({
-                          url: '../init/controllers/edit_document.php',
-                          type: "POST",
-                          data: data,
-                          processData: false,
-                          contentType: false,
-
-                          async: false,
-                          cache: false,
-
-                          success: function(data) {
-                              $('#message').html(data);
-
-                          },
-                          error: function(data) {
-                              console.log("Failed");
-                          }
-                      });
-                  }     
-
-              });
-          });
-      </script>
 
 </body>
  

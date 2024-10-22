@@ -63,6 +63,7 @@
                                                         <input data-parsley-type="alphanum" name="daysto_process" type="text" required="" placeholder="" class="form-control">
                                                     </div>
                                                 </div>
+                                                
                                                 <div class="form-group row">
                                                     <label class="col-12 col-sm-3 col-form-label text-sm-right">Price: </label>
                                                     <div class="col-12 col-sm-8 col-lg-6">
@@ -74,10 +75,14 @@
                                                 <div class="form-group row text-right">
                                                     <div class="col col-sm-10 col-lg-9 offset-sm-1 offset-lg-0">
                                                         <button class="btn btn-space btn-primary add-document">Submit</button>
+
+                                                        
                                                     </div>
                                                 </div>
                                             </form>
+                                            
                                         </div>
+                                        
                                     </div>
                             </div>
                         </div>

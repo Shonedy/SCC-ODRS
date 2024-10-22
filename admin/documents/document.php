@@ -65,7 +65,7 @@
                                                     <td><?= $row['daysto_process']; ?></td>
                                                     <td><?= $row['price']; ?></td>
                                                     <td class="align-right">
-                                                        <a href="edit-course.php?course=<?= $row['document_id']; ?>&course-name=<?php echo $row['document_name']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                        <a href="edit-document.php?document=<?= $row['document_id']; ?>&document-name=<?php echo $row['document_name']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                                           <i class="fa fa-edit"></i>
                                                         </a> 
                                                       </td>
