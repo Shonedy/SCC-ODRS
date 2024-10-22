@@ -2,9 +2,6 @@
 <?php
  
   include('../init/model/class_model.php');
-
- 
-
 ?>
 <!doctype html>
 <html lang="en">

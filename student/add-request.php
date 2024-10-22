@@ -149,7 +149,7 @@
                         <!-- Control Number Section -->
                           <?php 
                         function createRandomcnumber() {
-                            $chars = "003232303232023232023456789";
+                            $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                             srand((double)microtime()*1000000);
                             $i = 0;
                             $control = '';
@@ -185,78 +185,42 @@ $conn = new class_model();
 $doc = $conn->fetchAll_document(); 
 if ($doc && count($doc) > 0) {
     foreach ($doc as $index => $document) {
-        // Check if the document is "Certification"
-        if ($document['document_name'] === 'Certification') {
-            // Specific rendering for the Certification document
-            echo '<div class="form-check">';
-            echo '<input class="form-check-input document-checkbox" type="checkbox" name="document_name[]" id="document_name' . ($index + 1) . '" value="' . $document['document_name'] . '" data-price="' . $document['price'] . '">';
-            echo '<label class="form-check-label">' . $document['document_name'] . ' (₱' . $document['price'] . ')</label>';
-            
-            // Render the specific Certification options
-            echo '<div id="certification_options_' . ($index + 1) . '" class="mt-2" style="display:none;">';
-            echo '<div class="form-group">';
+        echo '<div class="form-check">';
 
-            // Option for "Units Earned" with additional input field
-            echo '<div class="form-check">';
-            echo '<input class="form-check-input" type="radio" name="certification_type' . ($index + 1) . '" id="certification_type1_' . ($index + 1) . '" value="Units Earned">';
-            echo '<label class="form-check-label" for="certification_type1_' . ($index + 1) . '">Units Earned</label>';
-            echo '<input type="text" name="units_earned" id="units_earned_' . ($index + 1) . '" class="form-control mt-2" placeholder="Enter Units Earned" style="display:none;">'; // Text input for Units Earned
-            echo '</div>';
+        // Checkbox for selecting the document
+        echo '<input class="form-check-input document-checkbox" type="checkbox" name="document_name[]" id="document_name' . ($index + 1) . '" value="' . $document['document_name'] . '" data-price="' . $document['price'] . '">';
+        echo '<label class="form-check-label" for="document_name' . ($index + 1) . '">' . $document['document_name'] . ' (₱' . $document['price'] . ')</label>';
 
-            // Option for "As Graduate" with additional input field
-            echo '<div class="form-check">';
-            echo '<input class="form-check-input" type="radio" name="certification_type' . ($index + 1) . '" id="certification_type2_' . ($index + 1) . '" value="As Graduate">';
-            echo '<label class="form-check-label" for="certification_type2_' . ($index + 1) . '">As Graduate</label>';
-            echo '<input type="text" name="graduate_details" id="graduate_details_' . ($index + 1) . '" class="form-control mt-2" placeholder="Enter Graduation Details" style="display:none;">'; // Text input for As Graduate
-            echo '</div>';
+        // Hidden quantity input associated with the document
+        echo '<div id="quantity' . ($index + 1) . '" class="mt-2" style="display:none;">';
+        echo '<div class="d-flex align-items-center">';
+        echo '<label for="no_ofcopies' . ($index + 1) . '" class="mr-2">Copies:</label>';
+        echo '<input type="number" name="no_ofcopies[]" value="1" class="form-control no-of-copies" min="1" id="no_ofcopies' . ($index + 1) . '" style="width: 80px;">';
+        echo '</div>';
+        echo '</div>'; // Close quantity div
 
-            // Option for "Other" with additional input field
-            echo '<div class="form-check">';
-            echo '<input class="form-check-input" type="radio" name="certification_type' . ($index + 1) . '" id="certification_type3_' . ($index + 1) . '" value="Other">';
-            echo '<label class="form-check-label" for="certification_type3_' . ($index + 1) . '">Other (Please Specify)</label>';
-            echo '<input type="text" name="other_certification" id="other_certification_' . ($index + 1) . '" class="form-control mt-2" placeholder="Please Specify" style="display:none;">';
-            echo '</div>';
+        // Hidden div for request type radio buttons
+        echo '<div id="requestType' . ($index + 1) . '" class="mt-2" style="display:none;">';
 
-            echo '</div>';
-            echo '</div>'; // Close certification_options div
-            
-            echo '</div>'; // Close form-check div
-        } else {
-            // Render all other documents as before
-            echo '<div class="form-check">';
-            echo '<input class="form-check-input document-checkbox" type="checkbox" name="document_name[]" id="document_name' . ($index + 1) . '" value="' . $document['document_name'] . '" data-price="' . $document['price'] . '">';
-            echo '<label class="form-check-label">' . $document['document_name'] . ' (₱' . $document['price'] . ')</label>';
-            
-            // Hidden quantity input associated with the document
-            echo '<div id="quantity' . ($index + 1) . '" class="mt-2" style="display:none;">';
-            
-            // Input for the number of copies and request type (as before)
-            echo '<div class="d-flex align-items-center">';
-            echo '<label for="no_ofcopies' . ($index + 1) . '" class="mr-2">Copies:</label>';
-            echo '<input type="number" name="no_ofcopies[]" value="1" class="form-control no-of-copies" min="1" id="no_ofcopies' . ($index + 1) . '" style="width: 80px;">';
-            
-            // Radio buttons for request type
-            echo '<div class="form-check col-md-6 ml-3">';
-            echo '<input class="form-check-input" type="radio" name="request_type' . ($index + 1) . '" id="request_type1_' . ($index + 1) . '" value="1st request" checked>';
-            echo '<label class="form-check-label" for="request_type1_' . ($index + 1) . '">1st Request</label>';
-            echo '</div>';
-            
-            echo '<div class="form-check col-md-7 ml-3">';
-            echo '<input class="form-check-input" type="radio" name="request_type' . ($index + 1) . '" id="request_type2_' . ($index + 1) . '" value="re-issuance">';
-            echo '<label class="form-check-label" for="request_type2_' . ($index + 1) . '">Re-Issuance</label>';
-            echo '</div>';
-            
-            echo '</div>';
-            echo '</div>';
-            echo '</div>'; // Close form-check div
-        }
+        // Radio buttons for 1st request and re-issuance
+        echo '<div class="form-check">';
+        echo '<input class="form-check-input" type="radio" name="request_type_' . ($index + 1) . '" id="request_type1_' . ($index + 1) . '" value="1st request" required>';
+        echo '<label class="form-check-label" for="request_type1_' . ($index + 1) . '">1st Request</label>';
+        echo '</div>';
+
+        echo '<div class="form-check">';
+        echo '<input class="form-check-input" type="radio" name="request_type_' . ($index + 1) . '" id="request_type2_' . ($index + 1) . '" value="re-issuance" required>';
+        echo '<label class="form-check-label" for="request_type2_' . ($index + 1) . '">Re-Issuance</label>';
+        echo '</div>';
+
+        echo '</div>'; // Close request type div
+
+        echo '</div>'; // Close form-check div
     }
 } else {
     echo "No documents found.";
 }
 ?>
-
-
 
 
                             </div>
@@ -360,46 +324,22 @@ $(document).ready(function () {
     let formData = null;
     const deliveryFee = 50;
 
-    // Toggle visibility of quantity input and recalculate total
+    // Toggle visibility of quantity input and request type when checkbox is checked/unchecked
     $('input[name="document_name[]"]').change(function () {
-        const qtyDiv = `#quantity${this.id.replace('document_name', '')}`;
-        $(qtyDiv).toggle(this.checked).find('input').val(this.checked ? 1 : '');
+        const docIndex = this.id.replace('document_name', ''); // Get the document index
+        const qtyDiv = `#quantity${docIndex}`; // Quantity div
+        const requestTypeDiv = `#requestType${docIndex}`; // Request type div
 
-        // Check if the selected document is "Certification"
-        if ($(this).val() === 'Certification') {
-            const certOptionsDiv = `#certification_options_${this.id.replace('document_name', '')}`;
-            $(certOptionsDiv).toggle(this.checked);  // Show/Hide certification options
-
-            // If unchecked, reset the certification options
-            if (!this.checked) {
-                $(`#certification_options_${this.id.replace('document_name', '')} input[type="radio"]`).prop('checked', false);
-                $(`#units_earned_${this.id.replace('document_name', '')}`).hide().val('');
-                $(`#graduate_details_${this.id.replace('document_name', '')}`).hide().val('');
-                $(`#other_certification_${this.id.replace('document_name', '')}`).hide().val('');
-            }
+        if (this.checked) {
+            $(qtyDiv).show();
+            $(requestTypeDiv).show();
+        } else {
+            $(qtyDiv).hide().find('input').val(''); // Hide and clear quantity input
+            $(requestTypeDiv).hide(); // Hide request type div
+            $(`input[name="request_type_${docIndex}"]`).prop('checked', false); // Uncheck request type radio buttons
         }
 
-        calculateTotal();
-    });
-
-    // Show/Hide text inputs for certification options based on selected radio button
-    $('input[type="radio"]').change(function () {
-        const id = $(this).attr('id');
-        const index = id.split('_').pop(); // Extract the index from the radio button's ID
-
-        // Hide all certification-specific inputs initially
-        $(`#units_earned_${index}`).hide().val('');
-        $(`#graduate_details_${index}`).hide().val('');
-        $(`#other_certification_${index}`).hide().val('');
-
-        // Show the relevant input based on the selected option
-        if ($(this).val() === 'Units Earned') {
-            $(`#units_earned_${index}`).show(); // Show Units Earned field
-        } else if ($(this).val() === 'As Graduate') {
-            $(`#graduate_details_${index}`).show(); // Show As Graduate field
-        } else if ($(this).val() === 'Other') {
-            $(`#other_certification_${index}`).show(); // Show Other (Please Specify) field
-        }
+        calculateTotal(); // Recalculate total
     });
 
     // Toggle other purpose input visibility
@@ -436,24 +376,30 @@ $(document).ready(function () {
 
         formData.delete('document_name[]');
         formData.delete('no_ofcopies[]');
-        selectedDocs.each(function () {
-            formData.append('document_name[]', this.value);
+        formData.delete('request_type[]');
+
+        let formattedDocuments = [];
+
+        selectedDocs.each(function (index) {
+            const docIndex = this.id.replace('document_name', ''); // Get the index for each selected document
+
+            // Get document name and number of copies
+            const docName = this.value;
             const copies = $(this).closest('.form-check').find('input[name="no_ofcopies[]"]').val() || 1;
-            formData.append('no_ofcopies[]', copies);
 
-            // Collect additional certification info if selected
-            if (this.value === 'Certification') {
-                const index = this.id.replace('document_name', '');
-                const selectedCertType = $(`input[name="certification_type${index}"]:checked`).val();
-
-                if (selectedCertType === 'Units Earned') {
-                    formData.append('units_earned', $(`#units_earned_${index}`).val());
-                } else if (selectedCertType === 'As Graduate') {
-                    formData.append('graduate_details', $(`#graduate_details_${index}`).val());
-                } else if (selectedCertType === 'Other') {
-                    formData.append('other_certification', $(`#other_certification_${index}`).val());
-                }
+            // Get request type for this document, matching the unique index
+            const requestType = $(`input[name="request_type_${docIndex}"]:checked`).val();
+            if (!requestType) {
+                return showError(`Please select a request type for document ${docName}.`);
             }
+
+            // Collect document name and request type separately
+            formData.append('document_name[]', docName); // Append document name
+            formData.append('no_ofcopies[]', copies); // Append number of copies
+            formData.append('request_type[]', requestType); // Append request type separately
+
+            // Format the document string for display in the modal
+            formattedDocuments.push(`${index + 1}. ${docName} (x${copies}), ${requestType}`);
         });
 
         const total = calculateTotal();
@@ -463,7 +409,7 @@ $(document).ready(function () {
         // Populate and show the modal
         $('#modalStudentName').text(`${getField('first_name')} ${getField('middle_name')} ${getField('last_name')}`);
         $('#modalControlNo').text(getField('control_no'));
-        $('#modalDocumentName').text(selectedDocs.map((i, el) => el.value).get().join(', '));
+        $('#modalDocumentName').html(formattedDocuments.join('<br>')); // Display formatted document list
         $('#modalMode').text($('#mode_request').val());
         $('#modalTotalAmount').text(`₱${total.toFixed(2)}`);
         $('#paymentModal').modal('show');
@@ -495,12 +441,14 @@ $(document).ready(function () {
 
     function showError(msg) {
         $('#message').html(`<div class="alert alert-danger">${msg}</div>`);
+        setTimeout(() => $('#message').empty(), 3000); // Auto-hide error message after 3 seconds
     }
 
     $('.btn-secondary').click(function () {
         $('#paymentModal').modal('hide');
     });
 });
+
 
 
 // Example starter JavaScript for disabling form submissions if there are invalid fields

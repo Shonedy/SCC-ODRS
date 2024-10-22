@@ -477,39 +477,59 @@
 
 
 
-		public function add_request($first_name, $middle_name , $last_name, $complete_address, $birthdate, $course, $email_address, $control_no, $document_name, $price, $date_request, $registrar_status, $custodian_status, $dean_status, $library_status, $accounting_status, $purpose, $mode_request, $student_id) {
-			// Ensure the connection is active
-			if ($this->conn->ping()) {
-				// Prepare the SQL statement with 18 placeholders
-				$stmt = $this->conn->prepare("INSERT INTO tbl_documentrequest 
-					(first_name, middle_name, last_name, complete_address, birthdate, course, email_address, control_no, document_name, price, date_request, registrar_status, custodian_status, dean_status, library_status, accounting_status, purpose, mode_request, student_id) 
-					VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-		
-				if ($stmt === false) {
-					die('Prepare failed: (' . $this->conn->errno . ') ' . $this->conn->error);
-				}
-		
-				// Bind parameters
-				$stmt->bind_param("ssssssssssssssssssi", $first_name, $middle_name, $last_name, $complete_address, $birthdate, $course, $email_address, $control_no, $document_name, $price, $date_request, $registrar_status, $custodian_status, $dean_status, $library_status, $accounting_status, $purpose, $mode_request, $student_id);
-
-				// Execute the statement
-				if ($stmt->execute()) {
-					$stmt->close();
-					return true;
+			public function add_request(
+				$first_name, $middle_name, $last_name, $complete_address, 
+				$birthdate, $course, $email_address, $control_no, 
+				$document_name, $price, $request_type, $date_request, 
+				$registrar_status, $custodian_status, $dean_status, 
+				$library_status, $accounting_status, $purpose, 
+				$mode_request, $student_id
+			) {
+				// Ensure the connection is active
+				if ($this->conn->ping()) {
+					// Prepare the SQL statement with 20 placeholders
+					$stmt = $this->conn->prepare("INSERT INTO tbl_documentrequest 
+						(first_name, middle_name, last_name, complete_address, birthdate, 
+						course, email_address, control_no, document_name, price, request_type, 
+						date_request, registrar_status, custodian_status, dean_status, 
+						library_status, accounting_status, purpose, mode_request, student_id) 
+						VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			
+					if ($stmt === false) {
+						die('Prepare failed: (' . $this->conn->errno . ') ' . $this->conn->error);
+					}
+			
+					// Bind parameters: 19 strings and 1 integer for student_id
+					$stmt->bind_param(
+						"sssssssssssssssssssi", 
+						$first_name, $middle_name, $last_name, $complete_address, 
+						$birthdate, $course, $email_address, $control_no, 
+						$document_name, $price, $request_type, $date_request, 
+						$registrar_status, $custodian_status, $dean_status, 
+						$library_status, $accounting_status, $purpose, 
+						$mode_request, $student_id
+					);
+			
+					// Execute the statement
+					if ($stmt->execute()) {
+						$stmt->close();
+						return true;
+					} else {
+						// Log or handle errors as needed
+						error_log('Execute failed: (' . $stmt->errno . ') ' . $stmt->error);
+						$stmt->close();
+						return false;
+					}
 				} else {
-					// Log or handle errors as needed
-					error_log('Execute failed: (' . $stmt->errno . ') ' . $stmt->error);
-					$stmt->close();
-					return false;
+					// Handle lost connection
+					die('MySQL connection lost');
 				}
-			} else {
-				// Handle lost connection
-				die('MySQL connection lost');
 			}
-		}
+			
+			
 
-		
-		
+			
+			
 		
 		
 		public function add_myrequest($control_no, $student_id, $document_name, $date_releasing, $ref_number, $proof_ofpayment, $Verified){

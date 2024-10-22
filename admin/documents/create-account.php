@@ -142,7 +142,7 @@
                                                     <label class="col-12 col-sm-3 col-form-label text-sm-right">Status</label>
                                                     <div class="col-12 col-sm-8 col-lg-6">
                                                        <select data-parsley-type="alphanum" type="text" value="<?= $account_status; ?>" id="account_status" required="" placeholder="" class="form-control">
-                                                           <option value="<?= $account_status; ?>" hidden><?= $account_status; ?></option>
+                                                           <option value="<?= $account_status; ?>" hidden> Verified</option>
                                                            <option value="Active" style="background-color: green;color: #fff">Verified</option>
                                                            <option value="Inactive" style="background-color: red;color: #fff">Declined</option>
                                                        </select>

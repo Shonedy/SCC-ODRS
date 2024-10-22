@@ -25,15 +25,15 @@
     $conn = new class_model();
 
     // Validate and sanitize input fields
-    $studentID_no = trim($_POST['studentID_no']);
+    $studentID_no = isset($_POST['studentID_no']) ? trim($_POST['studentID_no']) : null; // Optional field
     $first_name = trim($_POST['first_name']);
     $middle_name = trim($_POST['middle_name']);
     $last_name = trim($_POST['last_name']);
     $complete_address = trim($_POST['complete_address']);
     $email_address = trim($_POST['email_address']);
     $mobile_number = trim($_POST['mobile_number']);
-	$status = "Active";
-	$is_highschool = "No";
+    $status = "Active";
+    $is_highschool = "No";
 
     // Check if file is uploaded
     if (isset($_FILES['id_upload']) && $_FILES['id_upload']['error'] === UPLOAD_ERR_OK) {
@@ -56,7 +56,7 @@
 
             // Insert student information into the database
             $stud = $conn->register($studentID_no, $first_name, $middle_name, $last_name, $complete_address, $email_address, $mobile_number, $id_upload, $status, $is_highschool);
-            
+
             if ($stud == TRUE) {
                 echo '<div class="alert alert-success">Student Registered Successfully!</div><script> setTimeout(function() { window.location.reload(); }, 1000); </script>';
             } else {
